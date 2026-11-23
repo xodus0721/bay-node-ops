@@ -39,7 +39,7 @@ spec:
           image: ethereum/client-go:v1.17.5   # 버전 고정. 4번 단계에서 PR로 올린다
           args:
             - --dev
-            - --dev.period=12
+            - --dev.period=0 # 12 -> 0. 일부러 장애 유발
             - --datadir=/data
             - --http
             - --http.addr=0.0.0.0
