@@ -1,0 +1,34 @@
+# 알람 규칙: 경고(warning)와 심각(critical)을 나눈다
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: geth-alerts
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: geth
+      rules:
+        - alert: GethDown
+          expr: up{job="geth-dev"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "geth-dev 메트릭을 1분 넘게 읽지 못함"
+
+        - alert: GethBlockStalled
+          expr: changes(max by (job) (chain_head_block)[2m:15s]) == 0   # 2분 동안 블록 번호가 한 번도 안 바뀜 (job 단위로 합쳐서 파드가 바뀌어도 한 줄로 본다)
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "geth-dev 블록 생성이 3분째 멈춤"
+
+        - alert: GethBlockStalledLong
+          expr: changes(max by (job) (chain_head_block)[5m:15s]) == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "geth-dev 블록 생성이 6분째 멈춤"

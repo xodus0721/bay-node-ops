@@ -1,0 +1,15 @@
+# Prometheus에게 "geth-dev 서비스의 metrics 포트를 15초마다 긁어라"라고 알려주는 설정
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: geth-dev
+  labels:
+    release: monitoring          # kube-prometheus-stack(릴리스 이름 monitoring)이 이 라벨이 붙은 것만 읽는다
+spec:
+  selector:
+    matchLabels:
+      app: geth-dev
+  endpoints:
+    - port: metrics
+      path: /debug/metrics/prometheus
+      interval: 15s

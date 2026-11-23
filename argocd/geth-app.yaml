@@ -1,0 +1,20 @@
+# ArgoCD에게 "내 GitHub 레포의 k8s/ 폴더를 클러스터에 맞춰라"라고 알려주는 설정
+# 이 파일만 처음에 한 번 kubectl apply 한다
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: geth-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/내아이디/bay-node-ops.git   # 내 레포 주소로 바꾸기
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true       # Git에서 지운 리소스는 클러스터에서도 지운다
+      selfHeal: true    # 누가 kubectl로 바꿔도 Git 상태로 되돌린다
