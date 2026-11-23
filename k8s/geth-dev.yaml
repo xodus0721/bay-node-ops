@@ -36,7 +36,7 @@ spec:
       enableServiceLinks: false    # 과제 2의 GETH_DEV_* WARN 제거
       containers:
         - name: geth
-          image: ethereum/client-go:v1.17.4   # 버전 고정. 4번 단계에서 PR로 올린다
+          image: ethereum/client-go:v1.17.5   # 버전 고정. 4번 단계에서 PR로 올린다
           args:
             - --dev
             - --dev.period=12
